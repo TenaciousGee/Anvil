@@ -1,0 +1,32 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/anvil-core",
+    "crates/anvil-cli",
+    "crates/anvil-app",
+]
+# The Qt app needs a Qt 6 toolchain, so plain `cargo build` / `cargo test`
+# only touch the Qt-free crates. Build the GUI with `cargo build -p anvil-app`.
+default-members = [
+    "crates/anvil-core",
+    "crates/anvil-cli",
+]
+
+[workspace.package]
+version = "1.0.0"
+edition = "2021"
+license = "GPL-3.0-or-later"
+repository = "https://example.invalid/anvil"
+rust-version = "1.85"
+
+[workspace.dependencies]
+anvil-core = { path = "crates/anvil-core" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+thiserror = "2"
+clap = { version = "4", features = ["derive"] }
+
+[profile.release]
+lto = "thin"
+codegen-units = 4
