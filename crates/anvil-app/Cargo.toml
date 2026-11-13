@@ -1,0 +1,21 @@
+[package]
+name = "anvil-app"
+description = "Anvil desktop app: Qt Quick UI over the Anvil core engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "anvil-gui"
+path = "src/main.rs"
+
+[dependencies]
+anvil-core.workspace = true
+cxx = "1.0"
+toml.workspace = true
+cxx-qt = "0.10"
+cxx-qt-lib = { version = "0.10", features = ["qt_full"] }
+
+[build-dependencies]
+cxx-qt-build = "0.10"

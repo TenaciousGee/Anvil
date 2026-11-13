@@ -1,0 +1,69 @@
+{
+  "frames": [
+    {
+      "media_type": "video",
+      "stream_index": 0,
+      "side_data_list": [
+        {
+          "side_data_type": "Mastering display metadata",
+          "red_x": "34000/50000", "red_y": "16000/50000",
+          "green_x": "13250/50000", "green_y": "34500/50000",
+          "blue_x": "7500/50000", "blue_y": "3000/50000",
+          "white_point_x": "15635/50000", "white_point_y": "16450/50000",
+          "min_luminance": "50/10000", "max_luminance": "40000000/10000"
+        },
+        { "side_data_type": "Content light level metadata", "max_content": 1105, "max_average": 307 },
+        { "side_data_type": "HDR Dynamic Metadata SMPTE2094-40 (HDR10+)", "application version": 1 }
+      ]
+    }
+  ],
+  "streams": [
+    {
+      "index": 0, "codec_name": "hevc", "profile": "Main 10", "codec_type": "video",
+      "width": 3840, "height": 2160, "pix_fmt": "yuv420p10le", "field_order": "progressive",
+      "color_range": "tv", "color_space": "bt2020nc", "color_transfer": "smpte2084",
+      "color_primaries": "bt2020", "chroma_location": "topleft",
+      "r_frame_rate": "24000/1001", "avg_frame_rate": "24000/1001",
+      "disposition": { "default": 1, "forced": 0 },
+      "tags": { "language": "eng" },
+      "side_data_list": [
+        {
+          "side_data_type": "DOVI configuration record", "dv_version_major": 1, "dv_version_minor": 0,
+          "dv_profile": 7, "dv_level": 6, "rpu_present_flag": 1, "el_present_flag": 1,
+          "bl_present_flag": 1, "dv_bl_signal_compatibility_id": 6
+        }
+      ]
+    },
+    {
+      "index": 1, "codec_name": "truehd", "profile": "Dolby TrueHD + Dolby Atmos", "codec_type": "audio",
+      "channels": 8, "disposition": { "default": 1, "forced": 0 },
+      "tags": { "language": "eng", "title": "TrueHD Atmos 7.1" }
+    },
+    {
+      "index": 2, "codec_name": "ac3", "codec_type": "audio", "channels": 6,
+      "disposition": { "default": 0, "forced": 0 }, "tags": { "language": "eng" }
+    },
+    {
+      "index": 3, "codec_name": "dts", "profile": "DTS-HD MA", "codec_type": "audio", "channels": 6,
+      "disposition": { "default": 0, "forced": 0 }, "tags": { "language": "ger" }
+    },
+    {
+      "index": 4, "codec_name": "hdmv_pgs_subtitle", "codec_type": "subtitle",
+      "disposition": { "default": 0, "forced": 0 }, "tags": { "language": "eng" }
+    },
+    {
+      "index": 5, "codec_name": "hdmv_pgs_subtitle", "codec_type": "subtitle",
+      "disposition": { "default": 0, "forced": 1 }, "tags": { "language": "ger", "title": "Forced" }
+    },
+    {
+      "index": 6, "codec_name": "hdmv_pgs_subtitle", "codec_type": "subtitle",
+      "disposition": { "default": 0, "forced": 0 }, "tags": { "language": "fre" }
+    }
+  ],
+  "chapters": [ {"id": 0}, {"id": 1}, {"id": 2} ],
+  "format": {
+    "filename": "/rips/Example Film (2026)/title_t00.mkv",
+    "format_name": "matroska,webm",
+    "duration": "7932.448000"
+  }
+}
