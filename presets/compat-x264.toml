@@ -1,0 +1,8 @@
+# Built-in preset layered on Quality Default: only changed keys are listed.
+inherits = "quality-default"
+name = "Compatible (x264)"
+description = "8-bit AVC for older TVs, phones and browsers. SDR sources only."
+
+[video]
+encoder = "x264"
+

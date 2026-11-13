@@ -1,0 +1,187 @@
+AV1 video encoder
+
+Usage: 
+
+Commands:
+  advanced  Advanced features
+  help      Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help
+          Print help (see a summary with '-h')
+
+  -V, --version
+          Print version
+
+INPUT/OUTPUT:
+  -o, --output <OUTPUT>
+          Compressed AV1 in IVF video output
+
+  -y
+          Overwrite output file
+
+  <INPUT>
+          Uncompressed YUV4MPEG2 video input
+
+THREADING:
+      --threads <THREADS>
+          Set the threadpool size. If 0, will use the number of logical CPUs. rav1e will use up to
+          this many threads. Additional tiles may be needed to increase thread utilization
+          
+          [default: 0]
+
+      --tile-rows <TILE_ROWS>
+          Number of tile rows. Must be a power of 2. rav1e may override this based on video
+          resolution
+          
+          [default: 0]
+
+      --tile-cols <TILE_COLS>
+          Number of tile columns. Must be a power of 2. rav1e may override this based on video
+          resolution
+          
+          [default: 0]
+
+      --tiles <TILES>
+          Number of tiles. Tile-cols and tile-rows are overridden so that the video has at least
+          this many tiles
+
+ENCODE SETTINGS:
+      --first-pass <STATS_FILE>
+          Perform the first pass of a two-pass encode, saving the pass data to the specified file
+          for future passes
+
+      --second-pass <STATS_FILE>
+          Perform the second pass of a two-pass encode, reading the pass data saved from a previous
+          pass from the specified file
+
+  -l, --limit <LIMIT>
+          Maximum number of frames to encode
+          
+          [default: 0]
+
+      --skip <SKIP>
+          Skip n number of frames and encode
+          
+          [default: 0]
+
+      --quantizer <QUANTIZER>
+          Quantizer (0-255), smaller values are higher quality [default: 100]
+
+      --min-quantizer <MIN_QUANTIZER>
+          Minimum quantizer (0-255) to use in bitrate mode [default: 0]
+
+  -b, --bitrate <BITRATE>
+          Bitrate (kbps)
+
+  -s, --speed <SPEED>
+          Speed level (0 is best quality, 10 is fastest)
+          Speeds 10 and 0 are extremes and are generally not recommended
+          
+          [default: 6]
+
+      --scd-speed <SCD_SPEED>
+          Speed level for scene-change detection, 0: best quality, 1: fastest mode. [default: 0 for
+          s0-s9, 1 for s10]
+
+  -i, --min-keyint <MIN_KEYINT>
+          Minimum interval between keyframes
+          
+          [default: 12]
+
+  -I, --keyint <KEYINT>
+          Maximum interval between keyframes. When set to 0, disables fixed-interval keyframes
+          
+          [default: 240]
+
+  -S, --switch-frame-interval <SWITCH_FRAME_INTERVAL>
+          Maximum interval between switch frames. When set to 0, disables switch frames
+          
+          [default: 0]
+
+      --reservoir-frame-delay <RESERVOIR_FRAME_DELAY>
+          "Number of frames over which rate control should distribute the reservoir [default:
+          min(240, 1.5x keyint)] A minimum value of 12 is enforced
+
+      --low-latency
+          Low latency mode; disables frame reordering. Has a significant speed-to-quality trade-off
+
+      --no-scene-detection
+          Disables scene detection entirely. Has a significant speed-to-quality trade-off in full
+          encodes. Useful for chunked encoding
+
+      --rdo-lookahead-frames <RDO_LOOKAHEAD_FRAMES>
+          Number of frames encoder should lookahead for RDO purposes\n\ [default value for speed
+          levels: 10,9 - 10; 8,7,6 - 20; 5,4,3 - 30; 2,1,0 - 40]
+
+      --tune <TUNE>
+          Quality tuning
+          
+          [default: Psychovisual]
+
+      --still-picture
+          Still picture mode
+
+      --photon-noise <PHOTON_NOISE>
+          Uses grain synthesis to add photon noise to the resulting encode. Takes a strength value
+          0-64
+          
+          [default: 0]
+
+      --film-grain-table <FILM_GRAIN_TABLE>
+          Uses a film grain table file to apply grain synthesis to the encode. Uses the same table
+          file format as aomenc and svt-av1
+
+      --high-bitdepth
+          Force the high bitdepth codepath even for 8bit content. Mainly for debugging purposes
+
+VIDEO METADATA:
+      --range <RANGE>
+          Pixel range
+
+      --primaries <PRIMARIES>
+          Color primaries used to describe color parameters
+
+      --transfer <TRANSFER>
+          Transfer characteristics used to describe color parameters
+
+      --matrix <MATRIX>
+          Matrix coefficients used to describe color parameters
+
+      --mastering-display <MASTERING_DISPLAY>
+          Mastering display primaries in the form of G(x,y)B(x,y)R(x,y)WP(x,y)L(max,min)
+
+      --content-light <CONTENT_LIGHT>
+          Content light level used to describe content luminosity (cll,fall)
+
+      --frame-rate <FRAME_RATE>
+          Constant frame rate to set at the output (inferred from input when omitted)
+
+      --time-scale <TIME_SCALE>
+          The time scale associated with the frame rate if provided (ignored otherwise)
+          
+          [default: 0]
+
+LEVEL:
+      --level <LEVEL>
+          AV1 level to target in the form <major>.<minor>, e.g. 3.1. Specify "unconstrained" for no
+          level constraints or "auto" to let the encoder choose (default)
+
+DEBUGGING:
+      --benchmark
+          Provide a benchmark report at the end of the encoding
+
+  -v, --verbose
+          Verbose logging; outputs info for every frame
+
+  -q, --quiet
+          Do not output any status message
+
+      --psnr
+          Calculate and display PSNR metrics
+
+      --metrics
+          Calculate and display several metrics including PSNR, SSIM, CIEDE2000 etc
+
+  -r, --reconstruction <RECONSTRUCTION>
+          Outputs a Y4M file containing the output from the decoder

@@ -1,0 +1,298 @@
+# Flatpak manifest for Anvil, with the tools it drives bundled:
+# FFmpeg, x265, x264, SVT-AV1, VapourSynth R82 with BestSource and the filter
+# plugins, MKVToolNix, MediaInfo, Tesseract, dovi_tool and hdr10plus_tool.
+#
+# Build (needs network access to Flathub and the source hosts):
+#   flatpak install flathub org.kde.Sdk//6.9 org.kde.Platform//6.9 \
+#       org.freedesktop.Sdk.Extension.rust-stable//24.08
+#   flatpak-builder --user --install --force-clean build-dir \
+#       packaging/flatpak/io.github.anvil_video.Anvil.yml
+#   flatpak run io.github.anvil_video.Anvil
+#
+# The app id uses a placeholder GitHub organisation (anvil_video); change
+# it to your own before publishing on Flathub. rav1e and the NVIDIA, Intel
+# and AMD encoders (NVEncC, QSVEncC, VCEEncC) are not bundled: VAAPI works
+# inside the sandbox through /dev/dri.
+app-id: io.github.anvil_video.Anvil
+runtime: org.kde.Platform
+runtime-version: "6.9"
+sdk: org.kde.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+command: anvil-gui
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri                 # VAAPI encoding and GPU preview
+  - --filesystem=home            # rips, output folders, discs copied to disk
+  - --filesystem=/media
+  - --filesystem=/run/media
+  - --filesystem=/mnt
+  - --env=PYTHONPATH=/app/lib/python3/site-packages
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /lib/cmake
+  - /share/man
+  - /share/doc
+  - "*.a"
+  - "*.la"
+
+modules:
+  # ---- Decoding and audio ----------------------------------------------
+  - name: dav1d
+    buildsystem: meson
+    config-opts: [-Denable_tools=false, -Denable_tests=false]
+    sources:
+      - type: git
+        url: https://github.com/videolan/dav1d.git
+        tag: 1.5.4
+        commit: 54706fc6bc0cdecab7e9593974a4039cc038fca7
+
+  - name: ffmpeg
+    config-opts:
+      - --enable-gpl
+      - --enable-version3
+      - --enable-shared
+      - --disable-static
+      - --disable-doc
+      - --disable-debug
+      - --enable-libdav1d
+      - --enable-libopus
+      - --enable-vaapi
+      - --enable-libdrm
+    sources:
+      - type: git
+        url: https://github.com/FFmpeg/FFmpeg.git
+        tag: n9.0.2
+        commit: 946fcce07b6dcd0331c8cc609192aeff5e1924f8
+
+  # ---- VapourSynth and plugins -------------------------------------------
+  # VapourSynth R82 and its plugins, from their official PyPI builds (the
+  # plugins sit in site-packages/vapoursynth/plugins, which R80+ loads).
+  - name: vapoursynth
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-index --no-deps --prefix=/app *.whl
+      # A version-free path for PYTHONPATH (finish-args).
+      - mkdir -p /app/lib/python3 && ln -sfn ../$(basename /app/lib/python3.*[0-9])/site-packages /app/lib/python3/site-packages
+      - test -x /app/bin/vspipe || ln -s ../lib/python3/site-packages/vapoursynth/vspipe /app/bin/vspipe
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/3c/30/55b464fe29960af3e8e8254eb236f5e3164c28a6ce66f9706f5d5567ddd4/vapoursynth-82-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+        sha256: 9bd85641d3655c06ff90c73042204fbcf6db7bd26f8ae9d60a7ee17acf534f2e
+      - type: file
+        url: https://files.pythonhosted.org/packages/71/db/e16bae42bb209354ba2c76c654ecbc394c630687124d659cd30554e121a0/vapoursynth_bestsource-23-py3-none-manylinux_2_28_x86_64.whl
+        sha256: d0ba517360a1ebc2135de18a31e3be52c04d29b139c0a7a3d2e4eb89d790b0ad
+      - type: file
+        url: https://files.pythonhosted.org/packages/ec/de/40a4c15d0ddb4014edb3fd92f1358cf9e2c2b14eb272b04912aaa802e58f/vapoursynth_lsmas-1310.0.0.0-py3-none-manylinux_2_28_x86_64.whl
+        sha256: d181656d09e47ec8b9155acdcb6b3f938ea95814e4d59057cbec6acda86d4b3a
+      - type: file
+        url: https://files.pythonhosted.org/packages/fe/dc/15d6fd93802f3387312340c1d43d6955ba691bba7ace62a801179cbba115/vapoursynth_d2vsource-1.4-py3-none-manylinux_2_28_x86_64.whl
+        sha256: eb7a0295d47e6183e28c164ecee401ecfde71c37a910c4739f4b35905d9c3834
+      - type: file
+        url: https://files.pythonhosted.org/packages/f9/60/2820cb976b65a41ced9b47189242996b855442ddbbbc046a4f936a9e6ffe/vapoursynth_vivtc-2.0-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
+        sha256: ec5472da5a83253520cfa8f50975ddd3c6e368f2ded43e6e056acb48a10c3ce5
+      - type: file
+        url: https://files.pythonhosted.org/packages/4a/eb/df9f2b81f12634fac6ebe021f7f1e2a76dcb179aabe7d395b873c7222ff2/vapoursynth_bwdif-5.1-py3-none-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl
+        sha256: b0302fb4a47fdbb484ac970a6536ed217f7c9c0942d2f0ab39928d3bd50652ba
+      - type: file
+        url: https://files.pythonhosted.org/packages/e5/e5/3213ac70eb8796b55f97c5cd7e454d9e6a6edd7dcd0c5300f349b1ffe51d/vapoursynth_vszip-24.0.0-py3-none-manylinux_2_17_x86_64.whl
+        sha256: abf1be51f3b4733500eca04f7179236f8383e09b298ac4ca2c8e8959a93a92da
+      - type: file
+        url: https://files.pythonhosted.org/packages/c8/06/faf7b26c0639f10de8095df1f5a256514bbef10a7e83c9265502560f90a8/vapoursynth_cas-3.0-py3-none-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl
+        sha256: 9a2cd249bd9dfd057e06634d5fe98e662fe45769334c5a5d758a6bb24ef46d2e
+      - type: file
+        url: https://files.pythonhosted.org/packages/e3/86/497a531cc75061b609790542de3816cf61e8a902201aa0df909b75f583f7/vsnoise-1.3-py3-none-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+        sha256: 35cc606ef085cd140d62108023f30c16e9dddcea91f23c074cf798db520d66db
+      - type: file
+        url: https://files.pythonhosted.org/packages/81/18/05910dd731033fa0ac988caa8cccca430955aef5263fd2c5d9f548c3775a/vapoursynth_znedi3-3.3-py3-none-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+        sha256: 4bfb62f6746e94fd526d4b8c5d88eb1b732f9a5b21e8a08d9d8c7bb4cc536478
+      - type: file
+        url: https://files.pythonhosted.org/packages/a1/7b/fe16b0dd4d032387e39f951e642baf2da4d37086fba4acaf87283a0a257a/vapoursynth_mvtools-29-py3-none-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+        sha256: ceee185fe4a6fd4058612823bfb93c4c64e981d661248108de99a6560553bc2a
+
+  # ---- Encoders -----------------------------------------------------------
+  - name: x265
+    buildsystem: cmake-ninja
+    subdir: source
+    config-opts:
+      - -DHIGH_BIT_DEPTH=ON
+      - -DENABLE_HDR10_PLUS=ON
+      - -DENABLE_SHARED=OFF
+      - -DENABLE_CLI=ON
+    sources:
+      - type: git
+        url: https://bitbucket.org/multicoreware/x265_git.git
+        tag: "4.1"
+
+  - name: x264
+    config-opts: [--enable-pic, --disable-lavf, --bit-depth=all]
+    sources:
+      - type: git
+        url: https://code.videolan.org/videolan/x264.git
+        branch: stable
+
+  - name: svt-av1
+    buildsystem: cmake-ninja
+    config-opts: [-DBUILD_TESTING=OFF, -DCMAKE_BUILD_TYPE=Release]
+    sources:
+      - type: git
+        url: https://gitlab.com/AOMediaCodec/SVT-AV1.git
+        tag: v3.1.2
+
+  # ---- MKVToolNix (command-line tools only) -------------------------------
+  - name: libebml
+    buildsystem: cmake-ninja
+    config-opts: [-DBUILD_SHARED_LIBS=ON]
+    sources:
+      - type: git
+        url: https://github.com/Matroska-Org/libebml.git
+        tag: release-1.4.7
+        commit: 3e72a85de45cbb385d225a0a60eb3c9114743dd8
+
+  - name: libmatroska
+    buildsystem: cmake-ninja
+    config-opts: [-DBUILD_SHARED_LIBS=ON]
+    sources:
+      - type: git
+        url: https://github.com/Matroska-Org/libmatroska.git
+        tag: release-1.7.2
+        commit: 280281a8aeb69881f70ee3d6ff26aa6d964365a3
+
+  - name: fmt
+    buildsystem: cmake-ninja
+    config-opts: [-DFMT_TEST=OFF, -DBUILD_SHARED_LIBS=ON]
+    sources:
+      - type: git
+        url: https://github.com/fmtlib/fmt.git
+        tag: 11.2.0
+        commit: 40626af88bd7df9a5fb80be7b25ac85b122d6c21
+
+  - name: boost
+    buildsystem: simple
+    build-commands:
+      - ./bootstrap.sh --prefix=/app --with-libraries=filesystem,system,date_time
+      - ./b2 -j${FLATPAK_BUILDER_N_JOBS} install link=shared variant=release
+    sources:
+      - type: git
+        url: https://github.com/boostorg/boost.git
+        tag: boost-1.88.0
+        commit: 199ef13d6034c85232431130142159af3adfce22
+
+  - name: mkvtoolnix
+    buildsystem: simple
+    build-commands:
+      - ./autogen.sh
+      - ./configure --prefix=/app --disable-gui --disable-update-check --with-boost=/app
+      - rake -j ${FLATPAK_BUILDER_N_JOBS}
+      - rake install
+    sources:
+      - type: git
+        url: https://codeberg.org/mbunkus/mkvtoolnix.git
+        tag: release-92.0
+
+  # ---- MediaInfo ---------------------------------------------------------
+  - name: zenlib
+    buildsystem: autotools
+    subdir: Project/GNU/Library
+    sources:
+      - type: git
+        url: https://github.com/MediaArea/ZenLib.git
+        tag: v0.4.41
+        commit: 894980d3ecbc843d6ac685493f8f2ed5c2b6864c
+      - type: shell
+        commands: ["cd Project/GNU/Library && ./autogen.sh"]
+
+  - name: mediainfolib
+    buildsystem: autotools
+    subdir: Project/GNU/Library
+    sources:
+      - type: git
+        url: https://github.com/MediaArea/MediaInfoLib.git
+        tag: v26.10
+        commit: 153ad67a62172534b401e9d9a5752dc759fff77b
+      - type: shell
+        commands: ["cd Project/GNU/Library && ./autogen.sh"]
+
+  - name: mediainfo
+    buildsystem: autotools
+    subdir: Project/GNU/CLI
+    sources:
+      - type: git
+        url: https://github.com/MediaArea/MediaInfo.git
+        tag: v26.10
+        commit: f057dd3649bc8692a83863b67770e22c9b9dd81a
+      - type: shell
+        commands: ["cd Project/GNU/CLI && ./autogen.sh"]
+
+  # ---- OCR -----------------------------------------------------------------
+  - name: leptonica
+    buildsystem: cmake-ninja
+    config-opts: [-DBUILD_SHARED_LIBS=ON]
+    sources:
+      - type: git
+        url: https://github.com/DanBloomberg/leptonica.git
+        tag: 1.87.0
+        commit: 13275a278eb55b5746e33f95fbf5a2c8f604b3ab
+
+  - name: tesseract
+    buildsystem: cmake-ninja
+    config-opts: [-DBUILD_TRAINING_TOOLS=OFF, -DDISABLE_CURL=ON, -DBUILD_SHARED_LIBS=ON]
+    post-install:
+      - install -Dm644 eng.traineddata /app/share/tessdata/eng.traineddata
+    sources:
+      - type: git
+        url: https://github.com/tesseract-ocr/tesseract.git
+        tag: 5.5.4
+        commit: 7e548e6eff172f38f97664afe7f7ce40db36c8d6
+      - type: file
+        url: https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/eng.traineddata
+        sha256: 7d4322bd2a7749724879683fc3912cb542f19906c83bcc1a52132556427170b2
+
+  # ---- Dolby Vision and HDR10+ (upstream release binaries, static) ---------
+  - name: dovi-tool
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 dovi_tool /app/bin/dovi_tool
+    sources:
+      - type: archive
+        url: https://github.com/quietvoid/dovi_tool/releases/download/2.3.4/dovi_tool-2.3.4-x86_64-unknown-linux-musl.tar.gz
+        sha256: 1844258e13c26607b32224bf1fa82b595d3b35949f5467405fda560daad32b3f
+        strip-components: 0
+
+  - name: hdr10plus-tool
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 hdr10plus_tool /app/bin/hdr10plus_tool
+    sources:
+      - type: archive
+        url: https://github.com/quietvoid/hdr10plus_tool/releases/download/1.7.2/hdr10plus_tool-1.7.2-x86_64-unknown-linux-musl.tar.gz
+        sha256: 06385f37a639d61ba21d4be3150c863846933bc3b58110e094d8fc8f1c2249f2
+        strip-components: 0
+
+  # ---- Anvil ----------------------------------------------------------------
+  - name: anvil
+    buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/rust-stable/bin
+      env:
+        CARGO_HOME: /run/build/anvil/cargo
+        CARGO_NET_OFFLINE: "true"
+        QMAKE: /usr/bin/qmake6
+    build-commands:
+      - cargo --offline fetch --manifest-path Cargo.toml --verbose
+      - cargo --offline build --release -p anvil-cli -p anvil-app
+      - install -Dm755 target/release/anvil /app/bin/anvil
+      - install -Dm755 target/release/anvil-gui /app/bin/anvil-gui
+      - install -Dm644 packaging/io.github.anvil_video.Anvil.desktop -t /app/share/applications/
+      - install -Dm644 packaging/io.github.anvil_video.Anvil.metainfo.xml -t /app/share/metainfo/
+      # /share/doc is cleaned up, so the notices go where Flatpak keeps licences.
+      - install -Dm644 LICENSE AUTHORS THIRD-PARTY.md -t /app/share/licenses/io.github.anvil_video.Anvil/
+      - for s in 16 32 48 64 128 256 512; do install -Dm644 packaging/icons/anvil-$s.png /app/share/icons/hicolor/${s}x$s/apps/io.github.anvil_video.Anvil.png; done
+    sources:
+      - type: dir
+        path: ../..
+        skip: [target, dist, build-dir, .flatpak-builder]
+      - cargo-sources.json

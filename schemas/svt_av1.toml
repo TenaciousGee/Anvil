@@ -1,0 +1,154 @@
+# SVT-AV1 option page. Anvil sets preset, CRF, film grain, colour and HDR.
+encoder = "svt_av1"
+program = "SvtAv1EncApp"
+help_args = ["--help"]
+
+[[option]]
+flag = "--tune"
+label = "Tune"
+group = "Quality"
+kind = "choice"
+choices = ["0", "1"]
+default = "1"
+help = "0 visual quality, 1 PSNR."
+
+[[option]]
+flag = "--aq-mode"
+label = "Adaptive quantisation"
+group = "Quality"
+kind = "choice"
+choices = ["0", "1", "2"]
+default = "2"
+help = "0 off, 1 variance, 2 deltaq."
+
+[[option]]
+flag = "--enable-qm"
+label = "Quantisation matrices"
+group = "Quality"
+kind = "choice"
+choices = ["0", "1"]
+default = "0"
+help = "Often helps detail."
+
+[[option]]
+flag = "--qm-min"
+label = "QM min flatness"
+group = "Quality"
+kind = "int"
+min = 0
+max = 15
+default = "8"
+help = "With quantisation matrices on."
+
+[[option]]
+flag = "--film-grain-denoise"
+label = "Denoise with film grain"
+group = "Quality"
+kind = "choice"
+choices = ["0", "1"]
+default = "1"
+help = "0 keeps the source grain and adds synthesis on top."
+
+[[option]]
+flag = "--keyint"
+label = "Keyframe interval"
+group = "Frames"
+kind = "int"
+min = -2
+max = 1000
+default = "-2"
+help = "-2 is about 5 seconds; frames, or e.g. 10s."
+
+[[option]]
+flag = "--lookahead"
+label = "Lookahead frames"
+group = "Frames"
+kind = "int"
+min = -1
+max = 120
+default = "-1"
+help = "-1 automatic."
+
+[[option]]
+flag = "--scd"
+label = "Scene change detection"
+group = "Frames"
+kind = "choice"
+choices = ["0", "1"]
+default = "0"
+help = "Places keyframes on cuts."
+
+[[option]]
+flag = "--enable-tf"
+label = "Temporal filtering"
+group = "Frames"
+kind = "choice"
+choices = ["0", "1"]
+default = "1"
+help = "Can smooth detail; 0 keeps more grain."
+
+[[option]]
+flag = "--enable-overlays"
+label = "Overlay frames"
+group = "Frames"
+kind = "choice"
+choices = ["0", "1"]
+default = "0"
+help = "Slightly better quality."
+
+[[option]]
+flag = "--enable-cdef"
+label = "CDEF filter"
+group = "Loop filters"
+kind = "choice"
+choices = ["0", "1"]
+default = "1"
+help = "Directional enhancement filter."
+
+[[option]]
+flag = "--enable-restoration"
+label = "Loop restoration"
+group = "Loop filters"
+kind = "choice"
+choices = ["0", "1"]
+default = "1"
+help = "Restoration filter."
+
+[[option]]
+flag = "--fast-decode"
+label = "Fast decode"
+group = "Compatibility"
+kind = "choice"
+choices = ["0", "1"]
+default = "0"
+help = "Easier on weak players."
+
+[[option]]
+flag = "--lp"
+label = "Logical processors"
+group = "Performance"
+kind = "int"
+min = 0
+max = 256
+default = "auto"
+help = "Threads to use."
+
+[[option]]
+flag = "--tile-rows"
+label = "Tile rows (log2)"
+group = "Performance"
+kind = "int"
+min = 0
+max = 6
+default = "0"
+help = "More tiles decode faster in parallel."
+
+[[option]]
+flag = "--tile-columns"
+label = "Tile columns (log2)"
+group = "Performance"
+kind = "int"
+min = 0
+max = 6
+default = "0"
+help = "More tiles decode faster in parallel."

@@ -1,0 +1,317 @@
+# x265 option page. Options Anvil sets itself (preset, CRF, colour, HDR,
+# Dolby Vision, output depth) are not listed. "help" fixtures: help/x265-*.txt
+encoder = "x265"
+program = "x265"
+help_args = ["--fullhelp"]
+
+[[option]]
+flag = "--bframes"
+label = "B-frames"
+group = "Frames"
+kind = "int"
+min = 0
+max = 16
+default = "4"
+help = "Consecutive B-frames. More saves bits on calm scenes."
+
+[[option]]
+flag = "--b-adapt"
+label = "B-frame placement"
+group = "Frames"
+kind = "choice"
+choices = ["0", "1", "2"]
+default = "2"
+help = "0 fixed, 1 fast, 2 full trellis (best)."
+
+[[option]]
+flag = "--ref"
+label = "Reference frames"
+group = "Frames"
+kind = "int"
+min = 1
+max = 16
+default = "3"
+help = "Frames each frame may predict from. More is slower, slightly smaller."
+
+[[option]]
+flag = "--keyint"
+label = "Max keyframe interval"
+group = "Frames"
+kind = "int"
+min = 1
+max = 1000
+default = "250"
+help = "Longest gap between keyframes, in frames. Lower seeks faster."
+
+[[option]]
+flag = "--min-keyint"
+label = "Min keyframe interval"
+group = "Frames"
+kind = "int"
+min = 0
+max = 1000
+default = "auto"
+help = "Shortest gap between keyframes on scene cuts."
+
+[[option]]
+flag = "--rc-lookahead"
+label = "Lookahead frames"
+group = "Frames"
+kind = "int"
+min = 0
+max = 250
+default = "20"
+help = "Frames analysed ahead for frame types and rate control."
+
+[[option]]
+flag = "--open-gop"
+off = "--no-open-gop"
+label = "Open GOP"
+group = "Frames"
+kind = "toggle"
+default = "on"
+help = "Turn off for strict players or for cutting the file later."
+
+[[option]]
+flag = "--b-pyramid"
+off = "--no-b-pyramid"
+label = "B-frame pyramid"
+group = "Frames"
+kind = "toggle"
+default = "on"
+help = "Lets B-frames be references."
+
+[[option]]
+flag = "--aq-mode"
+label = "Adaptive quantisation"
+group = "Quality"
+kind = "choice"
+choices = ["0", "1", "2", "3", "4"]
+default = "2"
+help = "3 favours dark scenes (good for films), 4 adds edge detail."
+
+[[option]]
+flag = "--aq-strength"
+label = "AQ strength"
+group = "Quality"
+kind = "float"
+min = 0.0
+max = 3.0
+default = "1.0"
+help = "How strongly AQ moves bits between flat and detailed areas."
+
+[[option]]
+flag = "--psy-rd"
+label = "Psy-RD"
+group = "Quality"
+kind = "float"
+min = 0.0
+max = 5.0
+default = "2.0"
+help = "Keeps grain and texture rather than smoothing them."
+
+[[option]]
+flag = "--psy-rdoq"
+label = "Psy-RDOQ"
+group = "Quality"
+kind = "float"
+min = 0.0
+max = 50.0
+default = "0.0"
+help = "Keeps fine detail at quantisation. 1 to 4 for grainy films."
+
+[[option]]
+flag = "--qcomp"
+label = "Quantiser curve"
+group = "Quality"
+kind = "float"
+min = 0.5
+max = 1.0
+default = "0.6"
+help = "Higher keeps quality steadier across complex scenes."
+
+[[option]]
+flag = "--cutree"
+off = "--no-cutree"
+label = "CU-tree"
+group = "Quality"
+kind = "toggle"
+default = "on"
+help = "Spends more bits on blocks later frames reference."
+
+[[option]]
+flag = "--cbqpoffs"
+label = "Chroma Cb QP offset"
+group = "Quality"
+kind = "int"
+min = -12
+max = 12
+default = "0"
+help = "Negative values give colour more bits."
+
+[[option]]
+flag = "--crqpoffs"
+label = "Chroma Cr QP offset"
+group = "Quality"
+kind = "int"
+min = -12
+max = 12
+default = "0"
+help = "Negative values give colour more bits."
+
+[[option]]
+flag = "--rd"
+label = "RDO level"
+group = "Analysis"
+kind = "int"
+min = 1
+max = 6
+default = "3"
+help = "Mode decision thoroughness. Higher is slower and better."
+
+[[option]]
+flag = "--rdoq-level"
+label = "RDOQ level"
+group = "Analysis"
+kind = "choice"
+choices = ["0", "1", "2"]
+default = "0"
+help = "Rate-distortion optimised quantisation."
+
+[[option]]
+flag = "--me"
+label = "Motion search"
+group = "Analysis"
+kind = "choice"
+choices = ["dia", "hex", "umh", "star", "sea", "full"]
+default = "hex"
+help = "Wider searches find more motion, slower."
+
+[[option]]
+flag = "--subme"
+label = "Subpixel refinement"
+group = "Analysis"
+kind = "int"
+min = 0
+max = 7
+default = "2"
+help = "Higher is slower and more precise."
+
+[[option]]
+flag = "--merange"
+label = "Motion search range"
+group = "Analysis"
+kind = "int"
+min = 0
+max = 32768
+default = "57"
+help = "Pixels searched for motion."
+
+[[option]]
+flag = "--rect"
+off = "--no-rect"
+label = "Rectangular partitions"
+group = "Analysis"
+kind = "toggle"
+default = "off"
+help = "Slower, slightly better."
+
+[[option]]
+flag = "--amp"
+off = "--no-amp"
+label = "Asymmetric partitions"
+group = "Analysis"
+kind = "toggle"
+default = "off"
+help = "Slower, slightly better."
+
+[[option]]
+flag = "--limit-refs"
+label = "Limit references"
+group = "Analysis"
+kind = "choice"
+choices = ["0", "1", "2", "3"]
+default = "1"
+help = "Faster with little loss. 0 checks every reference."
+
+[[option]]
+flag = "--ctu"
+label = "Largest block (CTU)"
+group = "Analysis"
+kind = "choice"
+choices = ["64", "32", "16"]
+default = "64"
+help = "Smaller suits low resolutions."
+
+[[option]]
+flag = "--strong-intra-smoothing"
+off = "--no-strong-intra-smoothing"
+label = "Strong intra smoothing"
+group = "Analysis"
+kind = "toggle"
+default = "on"
+help = "Turn off to keep sharp gradients and grain."
+
+[[option]]
+flag = "--weightb"
+off = "--no-weightb"
+label = "Weighted B prediction"
+group = "Analysis"
+kind = "toggle"
+default = "off"
+help = "Helps fades."
+
+[[option]]
+flag = "--deblock"
+label = "Deblocking (strength:threshold)"
+group = "Loop filters"
+kind = "text"
+pattern = "^-?[0-6]:-?[0-6]$"
+default = "0:0"
+help = "Negative keeps more detail, e.g. -1:-1 for films."
+
+[[option]]
+flag = "--sao"
+off = "--no-sao"
+label = "SAO"
+group = "Loop filters"
+kind = "toggle"
+default = "on"
+help = "Smooths ringing; turn off to keep grain."
+
+[[option]]
+flag = "--limit-sao"
+off = "--no-limit-sao"
+label = "Limit SAO"
+group = "Loop filters"
+kind = "toggle"
+default = "off"
+help = "Faster SAO decisions."
+
+[[option]]
+flag = "--selective-sao"
+label = "Selective SAO"
+group = "Loop filters"
+kind = "choice"
+choices = ["0", "1", "2", "3", "4"]
+default = "0"
+help = "Applies SAO to fewer slices."
+
+[[option]]
+flag = "--frame-threads"
+label = "Frame threads"
+group = "Performance"
+kind = "int"
+min = 0
+max = 16
+default = "auto"
+help = "Frames encoded at once. Auto suits most machines."
+
+[[option]]
+flag = "--pools"
+label = "Thread pools"
+group = "Performance"
+kind = "text"
+pattern = "^[0-9+*,-]+$"
+default = "auto"
+help = "Threads per NUMA node, e.g. 16 or 8,8."

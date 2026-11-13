@@ -1,0 +1,80 @@
+# QSVEncC option page (rigaya). Anvil sets codec, quality preset, ICQ,
+# depth, colour, HDR and Dolby Vision. Checked against QSVEncC_Options.en.md.
+encoder = "qsvencc"
+program = "QSVEncC"
+help_args = ["--help"]
+
+[[option]]
+flag = "--bframes"
+label = "B-frames"
+group = "Frames"
+kind = "int"
+min = 0
+max = 16
+default = "auto"
+help = "Consecutive B-frames."
+
+[[option]]
+flag = "--ref"
+label = "Reference frames"
+group = "Frames"
+kind = "int"
+min = 0
+max = 16
+default = "auto"
+help = "Frames each frame may predict from."
+
+[[option]]
+flag = "--gop-len"
+label = "GOP length"
+group = "Frames"
+kind = "int"
+min = 0
+max = 1000
+default = "auto"
+help = "Longest gap between keyframes."
+
+[[option]]
+flag = "--b-pyramid"
+off = "--no-b-pyramid"
+label = "B-frame pyramid"
+group = "Frames"
+kind = "toggle"
+default = "auto"
+help = "Lets B-frames be references."
+
+[[option]]
+flag = "--extbrc"
+label = "Extended rate control"
+group = "Quality"
+kind = "flag"
+default = "off"
+help = "Better bit distribution on newer GPUs."
+
+[[option]]
+flag = "--mbbrc"
+label = "Per-block rate control"
+group = "Quality"
+kind = "flag"
+default = "off"
+help = "Adapts quality inside each frame."
+
+[[option]]
+flag = "--max-bitrate"
+label = "Max bitrate (kb/s)"
+group = "Compatibility"
+kind = "int"
+min = 0
+max = 800000
+default = "auto"
+help = "Peak limit for players."
+
+[[option]]
+flag = "--async-depth"
+label = "Async depth"
+group = "Performance"
+kind = "int"
+min = 0
+max = 64
+default = "auto"
+help = "Frames in flight on the GPU."

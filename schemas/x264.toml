@@ -1,0 +1,202 @@
+# x264 option page (8-bit AVC). Anvil sets preset, CRF, colour and depth.
+encoder = "x264"
+program = "x264"
+help_args = ["--fullhelp"]
+
+[[option]]
+flag = "--profile"
+label = "Profile"
+group = "Compatibility"
+kind = "choice"
+choices = ["baseline", "main", "high"]
+default = "high"
+help = "Baseline or main only for very old devices."
+
+[[option]]
+flag = "--level"
+label = "Level"
+group = "Compatibility"
+kind = "choice"
+choices = ["3.1", "4.0", "4.1", "4.2", "5.0", "5.1"]
+default = "auto"
+help = "4.1 suits most Blu-ray players and TVs."
+
+[[option]]
+flag = "--vbv-maxrate"
+label = "Max bitrate (kb/s)"
+group = "Compatibility"
+kind = "int"
+min = 0
+max = 300000
+default = "0"
+help = "Set with the buffer size for players with limits."
+
+[[option]]
+flag = "--vbv-bufsize"
+label = "Buffer size (kb)"
+group = "Compatibility"
+kind = "int"
+min = 0
+max = 300000
+default = "0"
+help = "Decoder buffer size."
+
+[[option]]
+flag = "--bframes"
+label = "B-frames"
+group = "Frames"
+kind = "int"
+min = 0
+max = 16
+default = "3"
+help = "Consecutive B-frames."
+
+[[option]]
+flag = "--b-adapt"
+label = "B-frame placement"
+group = "Frames"
+kind = "choice"
+choices = ["0", "1", "2"]
+default = "1"
+help = "2 is slower and better."
+
+[[option]]
+flag = "--ref"
+label = "Reference frames"
+group = "Frames"
+kind = "int"
+min = 1
+max = 16
+default = "3"
+help = "More is slower, slightly smaller."
+
+[[option]]
+flag = "--keyint"
+label = "Max keyframe interval"
+group = "Frames"
+kind = "int"
+min = 1
+max = 1000
+default = "250"
+help = "Longest gap between keyframes."
+
+[[option]]
+flag = "--rc-lookahead"
+label = "Lookahead frames"
+group = "Frames"
+kind = "int"
+min = 0
+max = 250
+default = "40"
+help = "Frames analysed ahead."
+
+[[option]]
+flag = "--aq-mode"
+label = "Adaptive quantisation"
+group = "Quality"
+kind = "choice"
+choices = ["0", "1", "2", "3"]
+default = "1"
+help = "3 favours dark scenes."
+
+[[option]]
+flag = "--aq-strength"
+label = "AQ strength"
+group = "Quality"
+kind = "float"
+min = 0.0
+max = 3.0
+default = "1.0"
+help = "How strongly AQ moves bits."
+
+[[option]]
+flag = "--psy-rd"
+label = "Psy-RD (rd:trellis)"
+group = "Quality"
+kind = "text"
+pattern = "^[0-9.]+:[0-9.]+$"
+default = "1.0:0.0"
+help = "Keeps texture; tune film sets 1.0:0.15."
+
+[[option]]
+flag = "--qcomp"
+label = "Quantiser curve"
+group = "Quality"
+kind = "float"
+min = 0.0
+max = 1.0
+default = "0.6"
+help = "Higher keeps quality steadier."
+
+[[option]]
+flag = "--deblock"
+label = "Deblocking (strength:threshold)"
+group = "Quality"
+kind = "text"
+pattern = "^-?[0-6]:-?[0-6]$"
+default = "0:0"
+help = "Negative keeps more detail."
+
+[[option]]
+flag = "--me"
+label = "Motion search"
+group = "Analysis"
+kind = "choice"
+choices = ["dia", "hex", "umh", "esa", "tesa"]
+default = "hex"
+help = "Wider searches are slower."
+
+[[option]]
+flag = "--subme"
+label = "Subpixel refinement"
+group = "Analysis"
+kind = "int"
+min = 0
+max = 11
+default = "7"
+help = "Higher is slower and better."
+
+[[option]]
+flag = "--merange"
+label = "Motion search range"
+group = "Analysis"
+kind = "int"
+min = 4
+max = 64
+default = "16"
+help = "Pixels searched for motion."
+
+[[option]]
+flag = "--trellis"
+label = "Trellis"
+group = "Analysis"
+kind = "choice"
+choices = ["0", "1", "2"]
+default = "1"
+help = "2 is slower and slightly better."
+
+[[option]]
+flag = "--no-fast-pskip"
+label = "No fast P-skip"
+group = "Analysis"
+kind = "flag"
+default = "off"
+help = "Avoids blocking in dark flat areas."
+
+[[option]]
+flag = "--no-dct-decimate"
+label = "No DCT decimation"
+group = "Analysis"
+kind = "flag"
+default = "off"
+help = "Keeps fine grain."
+
+[[option]]
+flag = "--threads"
+label = "Threads"
+group = "Performance"
+kind = "int"
+min = 0
+max = 128
+default = "auto"
+help = "0 or empty is automatic."

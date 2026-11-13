@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Anvil
+GenericName=Video Encoder
+Comment=Encode films with x265, AV1 and GPU encoders, keeping HDR, Dolby Vision and lossless audio
+Exec=anvil-gui %F
+Icon=io.github.anvil_video.Anvil
+Terminal=false
+Categories=AudioVideo;Video;
+MimeType=video/x-matroska;video/mp4;video/mp2t;video/x-m2ts;
+Keywords=encode;x265;hevc;av1;blu-ray;dvd;hdr;dolby vision;staxrip;
+StartupWMClass=anvil-gui

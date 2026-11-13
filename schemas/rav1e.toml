@@ -1,0 +1,81 @@
+# rav1e option page. Anvil sets speed, quantizer, colour and HDR.
+encoder = "rav1e"
+program = "rav1e"
+help_args = ["--help"]
+
+[[option]]
+flag = "--tune"
+label = "Tune"
+group = "Quality"
+kind = "choice"
+choices = ["Psychovisual", "Psnr"]
+default = "Psychovisual"
+help = "Psychovisual looks better; Psnr scores better."
+
+[[option]]
+flag = "--photon-noise"
+label = "Photon noise (grain)"
+group = "Quality"
+kind = "int"
+min = 0
+max = 64
+default = "0"
+help = "Synthesised film grain strength."
+
+[[option]]
+flag = "--keyint"
+label = "Max keyframe interval"
+group = "Frames"
+kind = "int"
+min = 0
+max = 1000
+default = "240"
+help = "Longest gap between keyframes."
+
+[[option]]
+flag = "--min-keyint"
+label = "Min keyframe interval"
+group = "Frames"
+kind = "int"
+min = 0
+max = 1000
+default = "12"
+help = "Shortest gap between keyframes."
+
+[[option]]
+flag = "--rdo-lookahead-frames"
+label = "Lookahead frames"
+group = "Frames"
+kind = "int"
+min = 1
+max = 40
+default = "auto"
+help = "Frames analysed ahead."
+
+[[option]]
+flag = "--no-scene-detection"
+label = "No scene detection"
+group = "Frames"
+kind = "flag"
+default = "off"
+help = "Faster, worse."
+
+[[option]]
+flag = "--threads"
+label = "Threads"
+group = "Performance"
+kind = "int"
+min = 0
+max = 256
+default = "auto"
+help = "0 or empty is automatic."
+
+[[option]]
+flag = "--tiles"
+label = "Tiles"
+group = "Performance"
+kind = "int"
+min = 0
+max = 64
+default = "auto"
+help = "More tiles use more threads."

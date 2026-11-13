@@ -1,0 +1,19 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 The Anvil contributors (see AUTHORS)
+# Anvil AppImage entry point.
+#   ./Anvil-x86_64.AppImage            the GUI
+#   ./Anvil-x86_64.AppImage cli ARGS   the command-line tool (anvil ARGS)
+#   ln -s Anvil-x86_64.AppImage anvil  then `anvil ARGS` runs the CLI too
+HERE="$(dirname "$(readlink -f "$0")")"
+for hook in "$HERE"/apprun-hooks/*.sh; do
+    [ -e "$hook" ] && . "$hook"
+done
+if [ "$1" = "cli" ]; then
+    shift
+    exec "$HERE/usr/bin/anvil" "$@"
+fi
+case "$(basename "${ARGV0:-$0}")" in
+    anvil) exec "$HERE/usr/bin/anvil" "$@" ;;
+esac
+exec "$HERE/usr/bin/anvil-gui" "$@"

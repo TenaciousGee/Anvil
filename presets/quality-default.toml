@@ -1,0 +1,90 @@
+# Anvil built-in preset: Quality Default
+#
+# One-click, high-quality encode. CPU x265 10-bit, auto-crop, native lossless
+# audio first then Dolby Digital (AC-3), every subtitle and chapter kept,
+# HDR10 / Dolby Vision / HDR10+ preserved. Values are starting points to
+# tune against the test corpus.
+
+name = "Quality Default"
+description = "x265 10-bit on the CPU, lossless audio then AC-3, HDR kept, at most a third of the source size. Good for everything."
+
+[video]
+encoder = "x265"
+
+[video.x265]
+# "medium" is about 2.4 times faster than "slow" for nearly the same size and
+# quality at these CRFs; "slow" put a 2-hour UHD film past 30 hours on 32
+# threads. Choose "slow" in your own preset if time is no object.
+preset = "medium"
+# Quality first: the size target below raises the CRF only if a film would
+# not otherwise fit.
+crf = { sd = 17.0, hd = 18.0, uhd = 18.0 }
+extra_args = ["--aq-mode", "3", "--no-sao", "--deblock", "-1:-1"]
+
+[video.svt_av1]
+preset = 4
+crf = { sd = 22, hd = 24, uhd = 26 }
+film_grain = 8
+
+[video.nvencc]
+codec = "hevc"
+preset = "p7"
+quality = { sd = 20, hd = 21, uhd = 22 }
+
+# Intel Quick Sync (QSVEncC): --icq quality, --quality best ... fastest.
+[video.qsvencc]
+codec = "hevc"
+preset = "best"
+quality = { sd = 20, hd = 21, uhd = 22 }
+
+# AMD (VCEEncC): constant QP for I frames (P and B are 2 and 4 higher),
+# --preset slow, balanced or fast.
+[video.vceencc]
+codec = "hevc"
+preset = "slow"
+quality = { sd = 20, hd = 21, uhd = 22 }
+
+# FFmpeg VAAPI (Intel or AMD through the system driver): constant QP.
+[video.ffmpeg_vaapi]
+codec = "hevc"
+qp = { sd = 21, hd = 22, uhd = 23 }
+device = "/dev/dri/renderD128"
+
+# x264: 8-bit AVC for older players (SDR sources only).
+[video.x264]
+preset = "slow"
+tune = "film"
+crf = { sd = 17.0, hd = 18.0, uhd = 19.0 }
+
+# rav1e: AV1, speed 0 (slowest) to 10, quantizer 0 to 255.
+[video.rav1e]
+speed = 6
+quantizer = { sd = 70, hd = 80, uhd = 90 }
+
+[filters]
+name = "Clean (crop only)"
+source = "best_source"
+blocks = []
+
+[audio]
+languages = ["eng"]
+ac3_bitrate_multichannel = 640
+ac3_bitrate_stereo = 224
+
+[subtitles]
+languages = []          # empty keeps every language
+keep_forced = true
+
+[output]
+container = "mkv"
+name_template = "{title}"
+auto_crop = true
+keep_chapters = true
+video_passthrough = false
+# Keep the finished file (audio included) at or under this share of the
+# source. Short sample encodes pick the CRF before the main encode. 0 = off.
+max_size_percent = 33
+
+[hdr]
+keep_dolby_vision = true
+keep_hdr10_plus = true

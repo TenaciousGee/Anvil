@@ -1,0 +1,8 @@
+# Built-in preset layered on Quality Default: NVIDIA hardware HEVC.
+inherits = "quality-default"
+name = "Fast (NVIDIA)"
+description = "NVEncC HEVC 10-bit. Much faster, slightly larger files for the same quality."
+
+[video]
+encoder = "nvencc"
+

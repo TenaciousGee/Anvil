@@ -1,0 +1,8 @@
+# Built-in preset layered on Quality Default: only changed keys are listed.
+inherits = "quality-default"
+name = "AV1 (rav1e)"
+description = "rav1e 10-bit AV1, the Rust encoder. Slower than SVT-AV1; Dolby Vision and HDR10+ are not carried to AV1."
+
+[video]
+encoder = "rav1e"
+

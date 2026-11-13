@@ -1,0 +1,63 @@
+# FFmpeg VAAPI option page (hevc_vaapi, av1_vaapi, h264_vaapi). Anvil sets
+# the device, QP, profile and colour.
+encoder = "ffmpeg_vaapi"
+program = "ffmpeg"
+help_args = ["-hide_banner", "-h", "full"]  # generic options plus every encoder's own
+
+[[option]]
+flag = "-bf"
+label = "B-frames"
+group = "Frames"
+kind = "int"
+min = 0
+max = 7
+default = "auto"
+help = "Consecutive B-frames, where the driver allows."
+
+[[option]]
+flag = "-g"
+label = "GOP length"
+group = "Frames"
+kind = "int"
+min = 1
+max = 1000
+default = "auto"
+help = "Longest gap between keyframes."
+
+[[option]]
+flag = "-b_depth"
+label = "B-frame depth"
+group = "Frames"
+kind = "int"
+min = 1
+max = 4
+default = "1"
+help = "Hierarchical B-frames."
+
+[[option]]
+flag = "-low_power"
+label = "Low-power mode"
+group = "Performance"
+kind = "choice"
+choices = ["0", "1"]
+default = "0"
+help = "Intel VDEnc: needed on some newer Intel GPUs."
+
+[[option]]
+flag = "-async_depth"
+label = "Async depth"
+group = "Performance"
+kind = "int"
+min = 1
+max = 64
+default = "2"
+help = "Frames in flight on the GPU."
+
+[[option]]
+flag = "-tier"
+label = "Tier (HEVC)"
+group = "Compatibility"
+kind = "choice"
+choices = ["main", "high"]
+default = "main"
+help = "High allows higher bitrates."

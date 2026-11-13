@@ -1,0 +1,89 @@
+# VCEEncC option page (rigaya). Anvil sets codec, preset, QP, depth,
+# colour, HDR and Dolby Vision. Checked against VCEEncC_Options.en.md.
+encoder = "vceencc"
+program = "VCEEncC"
+help_args = ["--help"]
+
+[[option]]
+flag = "--pa"
+label = "Pre-analysis"
+group = "Quality"
+kind = "flag"
+default = "off"
+help = "Analyses frames first for better bit distribution."
+
+[[option]]
+flag = "--pa-sc"
+label = "Scene change sensitivity"
+group = "Quality"
+kind = "choice"
+choices = ["none", "low", "medium", "high"]
+default = "medium"
+help = "With pre-analysis."
+
+[[option]]
+flag = "--pa-caq-strength"
+label = "Content AQ strength"
+group = "Quality"
+kind = "choice"
+choices = ["low", "medium", "high"]
+default = "medium"
+help = "With pre-analysis."
+
+[[option]]
+flag = "--pa-lookahead"
+label = "Pre-analysis lookahead"
+group = "Quality"
+kind = "int"
+min = 0
+max = 41
+default = "auto"
+help = "Frames analysed ahead."
+
+[[option]]
+flag = "--vbaq"
+label = "Variance AQ"
+group = "Quality"
+kind = "flag"
+default = "off"
+help = "Moves bits towards flat areas."
+
+[[option]]
+flag = "--bframes"
+label = "B-frames"
+group = "Frames"
+kind = "int"
+min = 0
+max = 3
+default = "auto"
+help = "Not every GPU supports B-frames for HEVC."
+
+[[option]]
+flag = "--ref"
+label = "Reference frames"
+group = "Frames"
+kind = "int"
+min = 0
+max = 16
+default = "auto"
+help = "Frames each frame may predict from."
+
+[[option]]
+flag = "--gop-len"
+label = "GOP length"
+group = "Frames"
+kind = "int"
+min = 0
+max = 1000
+default = "auto"
+help = "Longest gap between keyframes."
+
+[[option]]
+flag = "--max-bitrate"
+label = "Max bitrate (kb/s)"
+group = "Compatibility"
+kind = "int"
+min = 0
+max = 800000
+default = "auto"
+help = "Peak limit for players."

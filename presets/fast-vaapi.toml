@@ -1,0 +1,8 @@
+# Built-in preset layered on Quality Default: only changed keys are listed.
+inherits = "quality-default"
+name = "Fast (VAAPI)"
+description = "FFmpeg VAAPI HEVC 10-bit on Intel or AMD through the system driver. Needs no extra encoder; Dolby Vision is not carried."
+
+[video]
+encoder = "ffmpeg_vaapi"
+

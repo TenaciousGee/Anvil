@@ -1,0 +1,8 @@
+# Built-in preset layered on Quality Default: only changed keys are listed.
+inherits = "quality-default"
+name = "AV1 Archive"
+description = "SVT-AV1 10-bit for smaller files. Dolby Vision and HDR10+ are not carried to AV1."
+
+[video]
+encoder = "svt_av1"
+

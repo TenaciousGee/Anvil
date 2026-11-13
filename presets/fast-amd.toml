@@ -1,0 +1,8 @@
+# Built-in preset layered on Quality Default: only changed keys are listed.
+inherits = "quality-default"
+name = "Fast (AMD)"
+description = "VCEEncC HEVC 10-bit on an AMD GPU. Dolby Vision and HDR10+ kept."
+
+[video]
+encoder = "vceencc"
+

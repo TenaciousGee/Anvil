@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.anvil_video.Anvil</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Anvil</name>
+  <summary>Video encoding, simple by default and tweakable underneath</summary>
+  <description>
+    <p>
+      Anvil encodes films and series in the spirit of StaxRip: drop a file, a folder,
+      a Blu-ray or a DVD and press Encode. Underneath, every setting can be changed.
+    </p>
+    <ul>
+      <li>x265, x264, SVT-AV1 and rav1e on the CPU; NVIDIA, Intel Quick Sync, AMD and VAAPI on the GPU</li>
+      <li>True 10-bit with HDR10, Dolby Vision 8.1 and HDR10+ kept, checked after every encode</li>
+      <li>Lossless audio first, then AC-3; subtitles, OCR to SRT and chapters</li>
+      <li>VapourSynth filters with a live preview and crop</li>
+      <li>A batch queue that survives restarts, presets with per-source rules</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">io.github.anvil_video.Anvil.desktop</launchable>
+  <provides>
+    <binary>anvil-gui</binary>
+    <binary>anvil</binary>
+  </provides>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="1.0.0" date="2026-11-12">
+      <description>
+        <p>First stable release: GPU encoders, x264 and rav1e, encoder option pages, Flatpak and AppImage.</p>
+      </description>
+    </release>
+  </releases>
+</component>
